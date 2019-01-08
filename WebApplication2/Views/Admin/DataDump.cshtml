@@ -11,7 +11,7 @@
 @{ 
     if (IsPost)
     {
-        if (string.IsNullOrEmpty(Request["passWord"]) || Request["passWord"] != "stmdumpit")
+        if (string.IsNullOrEmpty(Request["passWord"]) || Request["passWord"] != "PASSWORD")
         {
             Response.Write("<div class='row'><font color='red'><strong>Incorrect Password, please try again</strong></font></div>");
 
