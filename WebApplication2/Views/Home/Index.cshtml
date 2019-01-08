@@ -1,0 +1,922 @@
+﻿@using System.Diagnostics;
+@using System;
+@using System.Data.SqlClient;
+@using System.Text;
+
+@{
+    FormInfo formInfo = new FormInfo();
+
+    var showForm = "visible";
+    var showJumbotron = "visible";
+    var showResults = "collapse";
+    var showResultsHeight = "0px";
+    var jumbotronHeight = "";
+
+    var showError = "collapse";
+    var showErrorHeight = "0px";
+    var errorMessage = "";
+
+    ViewBag.Title = "Home Page";
+
+    if (IsPost)
+    {
+        if (string.IsNullOrEmpty(Request["familyName"]))
+        {
+            showForm = "collapse";
+            showJumbotron = "visible";
+            showResults = "collapse";
+            showResultsHeight = "0px";
+            jumbotronHeight = "";
+
+            showError = "visible";
+            showErrorHeight = "";
+            errorMessage = "Family Name is a required field, please click your back button and add a Family Name before submitting your form.";
+        }
+        else if (Request["schoolFamily"] == "Y" && string.IsNullOrEmpty(Request["teacherName"]))
+        {
+            showForm = "collapse";
+            showJumbotron = "visible";
+            showResults = "collapse";
+            showResultsHeight = "0px";
+            jumbotronHeight = "";
+
+            showError = "visible";
+            showErrorHeight = "";
+            errorMessage = "Teacher Name is required when you are a school family to help route items/information to you, please click your back button and add a Teacher Name before submitting your form.";
+        }
+        else
+        {
+            try
+            {
+                #region 0. Get All Form Info
+
+                formInfo.FamilyName = Request["familyName"];
+                formInfo.YoungestChildName = Request["firstChildName"];
+                formInfo.SMPSFamily = Request["schoolFamily"] == "Y" ? true : false;
+                formInfo.TeachersName = Request["teacherName"];
+
+
+                switch (Request["ticketOrder"])
+                {
+                    case "22tickets":
+                        formInfo.TicketOrder = 22;
+                        formInfo.TicketOrderCost = 10;
+                        break;
+                    case "58tickets":
+                        formInfo.TicketOrder = 58;
+                        formInfo.TicketOrderCost = 25;
+                        break;
+                    case "120tickets":
+                        formInfo.TicketOrder = 120;
+                        formInfo.TicketOrderCost = 50;
+                        break;
+                    case "248tickets":
+                        formInfo.TicketOrder = 248;
+                        formInfo.TicketOrderCost = 100;
+                        break;
+                    default:
+                        formInfo.TicketOrder = 0;
+                        formInfo.TicketOrderCost = 0;
+                        break;
+                }
+
+                formInfo.VIP3rdAndUp = int.Parse(Request["vip3rdandup"]);
+                formInfo.VIP3rdAndUpCost = formInfo.VIP3rdAndUp * 25;
+
+                formInfo.VIP2ndAndUnder = int.Parse(Request["vip2ndandunder"]);
+                formInfo.VIP2ndAndUnderCost = formInfo.VIP2ndAndUnder * 15;
+
+
+                formInfo.YouthXSPink = int.Parse(Request["youthXSPink"]);
+                formInfo.YouthXSBlue = int.Parse(Request["youthXSBlue"]);
+                formInfo.YouthSPink = int.Parse(Request["youthSPink"]);
+                formInfo.YouthSBlue = int.Parse(Request["youthSBlue"]);
+                formInfo.YouthMPink = int.Parse(Request["youthMPink"]);
+                formInfo.YouthMBlue = int.Parse(Request["youthMBlue"]);
+                formInfo.YouthLPink = int.Parse(Request["youthLPink"]);
+                formInfo.YouthLBlue = int.Parse(Request["youthLBlue"]);
+                formInfo.YouthXLPink = int.Parse(Request["youthXLPink"]);
+                formInfo.YouthXLBlue = int.Parse(Request["youthXLBlue"]);
+
+                formInfo.YouthShirtCost = (formInfo.YouthXSPink + formInfo.YouthXSBlue +
+                                           formInfo.YouthSPink + formInfo.YouthSBlue +
+                                           formInfo.YouthMPink + formInfo.YouthMBlue +
+                                           formInfo.YouthLPink + formInfo.YouthLBlue +
+                                           formInfo.YouthXLPink + formInfo.YouthXLBlue) * 8;
+
+                formInfo.AdultSPink = int.Parse(Request["adultSPink"]);
+                formInfo.AdultSBlue = int.Parse(Request["adultSBlue"]);
+                formInfo.AdultMPink = int.Parse(Request["adultMPink"]);
+                formInfo.AdultMBlue = int.Parse(Request["adultMBlue"]);
+                formInfo.AdultLPink = int.Parse(Request["adultLPink"]);
+                formInfo.AdultLBlue = int.Parse(Request["adultLBlue"]);
+
+                formInfo.AdultShirtCost = (formInfo.AdultSPink + formInfo.AdultSBlue +
+                                           formInfo.AdultMPink + formInfo.AdultMBlue +
+                                           formInfo.AdultLPink + formInfo.AdultLBlue) * 8;
+
+                formInfo.AdultXLPink = int.Parse(Request["adultXLPink"]);
+                formInfo.AdultXLBlue = int.Parse(Request["adultXLBlue"]);
+
+                formInfo.AdultShirtCost += (formInfo.AdultXLPink + formInfo.AdultXLBlue) * 10;
+
+                formInfo.Adult2XLPink = int.Parse(Request["adult2XLPink"]);
+                formInfo.Adult2XLBlue = int.Parse(Request["adult2XLBlue"]);
+                formInfo.Adult3XLPink = int.Parse(Request["adult3XLPink"]);
+                formInfo.Adult3XLBlue = int.Parse(Request["adult3XLBlue"]);
+
+                formInfo.AdultShirtCost += (formInfo.Adult2XLPink + formInfo.Adult2XLBlue +
+                                            formInfo.Adult3XLPink + formInfo.Adult3XLBlue) * 12;
+
+
+                formInfo.SponsorCost = int.Parse(Request["sponsorDonation"]);
+
+                #endregion
+
+                #region 1. Save entry as a row in the DB
+                SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["DataConnectionString"]);
+                connection.Open();
+
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    SqlCommand cmd = connection.CreateCommand();
+                    cmd.Connection = connection;
+
+                    try
+                    {
+                        int value;
+                        StringBuilder cmdText = new StringBuilder();
+
+                        cmdText.Append("INSERT INTO STMFFFRegistration (");
+                        cmdText.Append("FamilyName,YoungestChildName,SMPSFamily,TeachersName,NumTicketsPurchased,NumVIP3upPurchased,NumVIP2underPurchased,");
+                        cmdText.Append("YouthXSPink,YouthXSBlue,YouthSPink,YouthSBlue,YouthMPink,YouthMBlue,YouthLPink,YouthLBlue,YouthXLPink,YouthXLBlue, ");
+                        cmdText.Append("AdultSPink,AdultSBlue,AdultMPink,AdultMBlue,AdultLPink,AdultLBlue,AdultXLPink,AdultXLBlue,Adult2XLPink,Adult2XLBlue,Adult3XLPink,Adult3XLBlue,SponsorshipDonation) ");
+                        cmdText.Append("VALUES (");
+                        cmdText.Append("'" + formInfo.FamilyName.Replace('\'', '_') + "',");
+                        cmdText.Append("'" + formInfo.YoungestChildName.Replace('\'', '_') + "',");
+                        cmdText.Append((formInfo.SMPSFamily ? 1 : 0) + ",");
+                        cmdText.Append("'" + formInfo.TeachersName.Replace('\'', '_') + "',");
+                        cmdText.Append(formInfo.TicketOrder + ",");
+                        cmdText.Append(formInfo.VIP3rdAndUp + ",");
+                        cmdText.Append(formInfo.VIP2ndAndUnder + ",");
+                        cmdText.Append(formInfo.YouthXSPink + ",");
+                        cmdText.Append(formInfo.YouthXSBlue + ",");
+                        cmdText.Append(formInfo.YouthSPink + ",");
+                        cmdText.Append(formInfo.YouthSBlue + ",");
+                        cmdText.Append(formInfo.YouthMPink + ",");
+                        cmdText.Append(formInfo.YouthMBlue + ",");
+                        cmdText.Append(formInfo.YouthLPink + ",");
+                        cmdText.Append(formInfo.YouthLBlue + ",");
+                        cmdText.Append(formInfo.YouthXLPink + ",");
+                        cmdText.Append(formInfo.YouthXLBlue + ",");
+                        cmdText.Append(formInfo.AdultSPink + ",");
+                        cmdText.Append(formInfo.AdultSBlue + ",");
+                        cmdText.Append(formInfo.AdultMPink + ",");
+                        cmdText.Append(formInfo.AdultMBlue + ",");
+                        cmdText.Append(formInfo.AdultLPink + ",");
+                        cmdText.Append(formInfo.AdultLBlue + ",");
+                        cmdText.Append(formInfo.AdultXLPink + ",");
+                        cmdText.Append(formInfo.AdultXLBlue + ",");
+                        cmdText.Append(formInfo.Adult2XLPink + ",");
+                        cmdText.Append(formInfo.Adult2XLBlue + ",");
+                        cmdText.Append(formInfo.Adult3XLPink + ",");
+                        cmdText.Append(formInfo.Adult3XLBlue + ",");
+                        cmdText.Append(formInfo.SponsorCost + ")");
+                        cmd.CommandText = cmdText.ToString();
+
+                        cmd.ExecuteNonQuery();
+
+                    }
+                    catch (Exception ex)
+                    {
+
+
+                        Console.WriteLine("Commit Exception Type: {0}", ex.GetType());
+                        Console.WriteLine("  Message: {0}", ex.Message);
+                        throw (ex);
+
+                    }
+                }
+
+                showForm = "collapse";
+                showResults = "visible";
+                showResultsHeight = "";
+                showJumbotron = "collapse";
+                jumbotronHeight = "0px";
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                errorMessage = ex.Message;
+                showErrorHeight = "auto";
+                showError = "visible";
+
+            }
+        }
+    }
+}
+
+<div class="jumbotron" style="visibility: @showJumbotron; height: @jumbotronHeight;">
+    <table>
+        <tr>
+            <td>
+                <img src="~/Content/STMarySchoolLogo.png" width="300"/>
+            </td>
+            <td>
+                <h1>2019 Family Fun Fair</h1>
+                <p class="lead">
+                    
+                    Welcome to the St. Mary Parish School Family Fun Fair registration website.  Family Fun Fair is Friday,
+                    February 1st. This is an exciting time for St. Mary Parish School. We thank you in advance for helping
+                    support our school for this annual fundraiser. Family Fun Fair is open to anyone and a great tradition
+                    to celebrate friendships, family and faith. Please complete the following information to order your 2019
+                    wrist bands, tickets, t-shirts and please consider a donation to help raise funds for our school.
+                </p>
+            </td>
+        </tr>
+    </table>
+    
+
+</div>
+
+<!-- Error Form -->
+<div class="row" style="visibility: @showError; height: @showErrorHeight;">
+    <p style="color:red">An error occurred while submitting your information, please try again<br /><br />ERROR: <i>@errorMessage </i></p>
+</div>
+
+<!-- Results Form -->
+<div class="row" style="visibility: @showResults; height: @showResultsHeight;">
+    <table>
+        <tr>
+            <td align="left" valign="middle"><img src="~/Content/STMarySchoolLogo.png" style="width: 300px;" /></td>
+            <td align="left" valign="middle"><h1>2019 Family Fun Fair Receipt</h1></td>
+        </tr>
+        <tr>
+            <td colspan="2"><hr /></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <p>
+                    Thank you for submitting your information.  We've processed it and stored it in our records.  Here are your next steps:<br />
+                    <ol>
+                        <li><b style="color: red;">Print this page for your records (press control-P)</b></li>
+                        <li>Your 2019 FFF purchase will be billed to your March SmartTuition billing statement.</li>
+                        <li>Non school families, please print out your receipt and bring payment the night of the event to receive your wristbands and tickets.</li>
+                    </ol>
+
+                    <hr />
+                    <h2>Your Form Entries</h2>
+                    <table width="600">
+                        <tr>
+                            <td style="width: 50%">Family Name</td>
+                            <td style="width: 50%">@formInfo.FamilyName</td>
+                        </tr>
+                        <tr>
+                            <td>Youngest Child's First Name</td>
+                            <td>@formInfo.YoungestChildName</td>
+                        </tr>
+                        <tr>
+                            <td>Are you a School Family?</td>
+                            <td>@(formInfo.SMPSFamily == true ? "Yes" : "No")</td>
+                        </tr>
+                        <tr>
+                            <td>Youngest Child's Teacher's Name</td>
+                            <td>@formInfo.TeachersName</td>
+                        </tr>
+                    </table>
+                    <br />
+                    <h2>Your Cost Breakdown</h2>
+                    <table width="600">
+                        <tr>
+                            <td style="width: 60%"><b>Description</b></td>
+                            <td style="width: 20%"><b>Qty</b></td>
+                            <td style="width: 20%"><b>Cost</b></td>
+                        </tr>
+                        <tr>
+                            <td># of Tickets Bought</td>
+                            <td>@formInfo.TicketOrder</td>
+                            <td>$@formInfo.TicketOrderCost</td>
+                        </tr>
+                        <tr>
+                            <td># VIP Wristbands (3rd and up) @@$25 each</td>
+                            <td>@formInfo.VIP3rdAndUp</td>
+                            <td>$@formInfo.VIP3rdAndUpCost</td>
+                        </tr>
+                        <tr>
+                            <td># VIP Wristbands (2nd and Under) @@$15 each</td>
+                            <td>@formInfo.VIP2ndAndUnder</td>
+                            <td>$@formInfo.VIP2ndAndUnderCost</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><b>Youth Shirts</b></td>
+                        </tr>
+                        <tr>
+                            <td>XS (2-4) PINK SHIRT $8.00</td>
+                            <td>@formInfo.YouthXSPink</td>
+                            <td>$@(formInfo.YouthXSPink * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                XS (2-4) BLUE SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthXSBlue</td>
+                            <td>$@(formInfo.YouthXSBlue * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Small (6-8) PINK SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthSPink</td>
+                            <td>$@(formInfo.YouthSPink * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Small (6-8) BLUE SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthSBlue</td>
+                            <td>$@(formInfo.YouthSBlue * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Medium (10-12) PINK SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthMPink</td>
+                            <td>$@(formInfo.YouthMPink * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Medium (10-12) BLUE SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthMBlue</td>
+                            <td>$@(formInfo.YouthMBlue * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Large (14-16) PINK SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthLPink</td>
+                            <td>$@(formInfo.YouthLPink * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Large (14-16) BLUE SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthLBlue</td>
+                            <td>$@(formInfo.YouthLBlue * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                XL (18-20) PINK SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthXLPink</td>
+                            <td>$@(formInfo.YouthXLPink * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                XL (18-20) BLUE SHIRT $8.00
+                            </td>
+                            <td>@formInfo.YouthXLBlue</td>
+                            <td>$@(formInfo.YouthXLBlue * 8)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><b>Adult Shirts</b></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Small PINK SHIRT $8.00
+                            </td>
+                            <td>@formInfo.AdultSPink</td>
+                            <td>$@(formInfo.AdultSPink * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Small BLUE SHIRT $8.00
+                            </td>
+                            <td>@formInfo.AdultSBlue</td>
+                            <td>$@(formInfo.AdultSBlue * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Medium PINK SHIRT $8.00
+                            </td>
+                            <td>@formInfo.AdultMPink</td>
+                            <td>$@(formInfo.AdultMPink * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Medium BLUE SHIRT $8.00
+                            </td>
+                            <td>@formInfo.AdultMBlue</td>
+                            <td>$@(formInfo.AdultMBlue * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Large PINK SHIRT $8.00
+                            </td>
+                            <td>@formInfo.AdultLPink</td>
+                            <td>$@(formInfo.AdultLPink * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Large BLUE SHIRT $8.00
+                            </td>
+                            <td>@formInfo.AdultLBlue</td>
+                            <td>$@(formInfo.AdultLBlue * 8)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                XL PINK SHIRT $10.00
+                            </td>
+                            <td>@formInfo.AdultXLPink</td>
+                            <td>$@(formInfo.AdultXLPink * 10)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                XL BLUE SHIRT $10.00
+                            </td>
+                            <td>@formInfo.AdultXLBlue</td>
+                            <td>$@(formInfo.AdultXLBlue * 10)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                2XL PINK SHIRT $12.00
+                            </td>
+                            <td>@formInfo.Adult2XLPink</td>
+                            <td>$@(formInfo.Adult2XLPink * 12)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                2XL BLUE SHIRT $12.00
+                            </td>
+                            <td>@formInfo.Adult2XLBlue</td>
+                            <td>$@(formInfo.Adult2XLBlue * 12)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                3XL PINK SHIRT $12.00
+                            </td>
+                            <td>@formInfo.Adult3XLPink</td>
+                            <td>$@(formInfo.Adult3XLPink * 12)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                3XL BLUE SHIRT $12.00
+                            </td>
+                            <td>@formInfo.Adult3XLBlue</td>
+                            <td>$@(formInfo.Adult3XLBlue * 12)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Sponsorship Donation</b>
+                            </td>
+                            <td></td>
+                            <td>$@formInfo.SponsorCost</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><hr /></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3>Your Total Cost is...</h3>
+                            </td>
+                            <td></td>
+                            <td><h3>$@(formInfo.TicketOrderCost + formInfo.VIP3rdAndUpCost + formInfo.VIP2ndAndUnderCost + formInfo.YouthShirtCost + formInfo.AdultShirtCost + formInfo.SponsorCost)</h3></td>
+                        </tr>
+                    </table>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- STM Colors
+
+    Red:  #991A37
+    Blue: #002D56
+    -->
+<style>
+    td {
+        padding-left: 4px;
+    }
+
+    h1 {
+        color: #002D56;
+    }
+
+    h2 {
+        color: #991A37;
+    }
+</style>
+
+<!-- Main Form -->
+<div class="row" style="width: 800px;">
+    <form name="myForm" method="post" style="visibility: @showForm">
+        <h2>BASIC INFORMATION</h2>
+        <table>
+            <tr>
+                <td>Family Last Name</td>
+                <td><input type="text" name="familyName" maxlength="50" />&nbsp;<font color="red">(required)</font></td>
+            </tr>
+            <tr>
+                <td> First name of youngest child</td>
+                <td><input type="text" name="firstChildName" maxlength="25" /></td>
+            </tr>
+            <tr>
+                <td>Are you a school family?</td>
+                <td>
+                    <select name="schoolFamily">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>If a school family, youngest child's teacher</td>
+                <td><input type="text" name="teacherName" maxlength="50" />&nbsp;<font color="red">(required if school family)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <br />
+        <h2>TICKETS AND WRISTBANDS</h2>
+        <p>
+            Tickets are used for all food and games including the cake walk, soda wheel,
+            lollipop pull, and fishing games.  Tickets sold the night of FFF will be $0.50 each.
+        </p>
+        Please select your ticket purchase&nbsp;&nbsp;&nbsp;
+        <select name="ticketOrder">
+            <option value="0tickets" selected>0 tickets</option>
+            <option value="22tickets">22 tickets at $10 ($1 savings)</option>
+            <option value="58tickets">58 tickets at $25 ($4 savings)</option>
+            <option value="120tickets">120 tickets at $50 ($10 savings)</option>
+            <option value="248tickets">248 tickets at $100 ($24 savings)</option>
+        </select>
+        <br /><br />
+        <b> *** Best Savings - VIP Wristband *** Save on Game Tickets with the VIP Wristband</b>
+        <br />
+        <p>VIP Wristband good for all games except the cake walk, soda wheel, lollipop pull and fishing game.</p>
+
+        General VIP (3rd grade and up) includes sibling pricing.<br />
+        $25 each&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip3rdandup" value="0" checked /> 0&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip3rdandup" value="1" /> 1&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip3rdandup" value="2" /> 2&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip3rdandup" value="3" /> 3&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip3rdandup" value="4" /> 4&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip3rdandup" value="5" /> 5
+        <br />
+        <br />
+        Jr. VIP (2nd grand and under) includes sibling pricing.<br />
+        $15 each&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip2ndandunder" value="0" checked /> 0&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip2ndandunder" value="1" /> 1&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip2ndandunder" value="2" /> 2&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip2ndandunder" value="3" /> 3&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip2ndandunder" value="4" /> 4&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="vip2ndandunder" value="5" /> 5
+        <br /><br />
+        <b>*Tickets and wristbands will be available for pick up at the ticket booth in the activity center the night of FFF - Friday February 1st between 4:45 and 8pm.</b>
+        <br />
+        <br />
+        <h2>T-SHIRTS</h2>
+        <p>
+            Get your student designed Spirit Wear!  Students may wear this years themed shirt beginning the
+            Friday of Fun Fair and on gym days for the remainder of the school year. Choose from two color
+            choices, PINK Shirts with PURPLE logo or BLUE Shirts with YELLOW logo. Please select your
+            t-shirt color and size below.
+        </p>
+
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b>Youth Sizes</b>
+                </td>
+                <td rowspan="23">
+                    <img src="~/Content/PinkShirt.png" width="300" />
+                    <br />
+                    <img src="~/Content/BlueShirt.png" width="300" />
+                </td>
+            </tr>
+            <tr>
+                <td>XS (2-4) PINK SHIRT $8.00</td>
+                <td>
+                    <select name="youthXSPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>XS (2-4) BLUE SHIRT $8.00</td>
+                <td>
+                    <select name="youthXSBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Small (6-8) PINK SHIRT $8.00</td>
+                <td>
+                    <select name="youthSPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Small (6-8) BLUE SHIRT $8.00</td>
+                <td>
+                    <select name="youthSBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Medium (10-12) PINK SHIRT $8.00</td>
+                <td>
+                    <select name="youthMPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Medium (10-12) BLUE SHIRT $8.00</td>
+                <td>
+                    <select name="youthMBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Large (14-16) PINK SHIRT $8.00</td>
+                <td>
+                    <select name="youthLPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Large (14-16) BLUE SHIRT $8.00</td>
+                <td>
+                    <select name="youthLBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>XL (18-20) PINK SHIRT $8.00</td>
+                <td>
+                    <select name="youthXLPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>XL (18-20) BLUE SHIRT $8.00</td>
+                <td>
+                    <select name="youthXLBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><br /><b>Adult Sizes</b></td>
+            </tr>
+            <tr>
+                <td>Small PINK SHIRT $8.00</td>
+                <td>
+                    <select name="adultSPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Small BLUE SHIRT $8.00</td>
+                <td>
+                    <select name="adultSBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Medium PINK SHIRT $8.00</td>
+                <td>
+                    <select name="adultMPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Medium BLUE SHIRT $8.00</td>
+                <td>
+                    <select name="adultMBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Large PINK SHIRT $8.00</td>
+                <td>
+                    <select name="adultLPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Large BLUE SHIRT $8.00</td>
+                <td>
+                    <select name="adultLBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>XL PINK SHIRT $10.00</td>
+                <td>
+                    <select name="adultXLPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>XL BLUE SHIRT $10.00</td>
+                <td>
+                    <select name="adultXLBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>2XL PINK SHIRT $12.00</td>
+                <td>
+                    <select name="adult2XLPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>2XL BLUE SHIRT $12.00</td>
+                <td>
+                    <select name="adult2XLBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>3XL PINK SHIRT $12.00</td>
+                <td>
+                    <select name="adult3XLPink">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>3XL BLUE SHIRT $12.00</td>
+                <td>
+                    <select name="adult3XLBlue">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <b>
+            *Shirts will be sent home with your child during Catholic Schools Week.
+        </b>
+        <br />
+        <br />
+        <h2>SPONSORS</h2>
+        <p>
+            Sponsors - please consider rounding up your order or a $20 donation and a spot on our VIP wall during the night of FFF.
+        </p>
+        <br />
+        My gift to FFF and St. Mary Parish students.
+        <select name="sponsorDonation">
+            <option value="0" selected>$0</option>
+            <option value="5">$5</option>
+            <option value="10">$10</option>
+            <option value="20">$20</option>
+            <option value="30">$30</option>
+            <option value="40">$40</option>
+            <option value="50">$50</option>
+            <option value="100" `>$100</option>
+        </select>
+
+        <hr />
+        <b>Your FFF purchase will be sent to your March SmartTuition bill. Hit submit to see a summary of your purchase and receipt.</b>
+        <p><input type="submit" value="Submit" /></p>
+    </form>
+</div>
+

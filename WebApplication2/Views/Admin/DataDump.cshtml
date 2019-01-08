@@ -1,0 +1,83 @@
+﻿@using System.Data;
+@using System.Data.Sql;
+@using System.Data.SqlClient;
+
+@{
+    ViewBag.Title = "DataDump";
+}
+
+<h2>DataDump</h2>
+
+@{ 
+    if (IsPost)
+    {
+        if (string.IsNullOrEmpty(Request["passWord"]) || Request["passWord"] != "stmdumpit")
+        {
+            Response.Write("<div class='row'><font color='red'><strong>Incorrect Password, please try again</strong></font></div>");
+
+        }
+        else
+        {
+
+            SqlConnection connection = new SqlConnection(@System.Configuration.ConfigurationManager.AppSettings["DataConnectionString"]);
+            connection.Open();
+
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+
+
+                SqlCommand cmd = new SqlCommand("SELECT * from STMFFFRegistration", connection);
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                var fileName = "DataDump_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+                var fileToCreate = HttpContext.Current.Request.PhysicalApplicationPath + fileName;
+
+                using (System.IO.StreamWriter fs = new System.IO.StreamWriter(fileToCreate))
+                {
+                    // Loop through the fields and add headers
+                    for (int i = 0; i < dr.FieldCount; i++)
+                    {
+                        string name = dr.GetName(i);
+                        if (name.Contains(","))
+                        {
+                            name = "\"" + name + "\"";
+                        }
+
+                        fs.Write(name + ",");
+                    }
+                    fs.WriteLine();
+
+                    // Loop through the rows and output the data
+                    while (dr.Read())
+                    {
+                        for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string value = dr[i].ToString();
+                            if (value.Contains(","))
+                            {
+                                value = "\"" + value + "\"";
+                            }
+
+                            fs.Write(value + ",");
+                        }
+                        fs.WriteLine();
+                    }
+
+                    fs.Close();
+
+                    var myMessage = "<a href='http://stmfffregistration.azurewebsites.net/" + fileName + "'><h3>Download a CSV of the Data</h3></a>";
+                    Response.Write(myMessage);
+                }
+
+            }
+            Response.End();
+        }
+    }
+}
+<div id="mainDiv" class="row">
+    <form method="post">
+        <p>Please input your password  <input type="password" name="passWord" /></p>
+        <input type="submit" value="submit" />
+    </form>
+</div>
+

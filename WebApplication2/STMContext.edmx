@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="STMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="STMRegistration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="concessionsForm" Type="bit" />
+          <Property Name="paidFees" Type="bit" />
+          <Property Name="howPaid" Type="nvarchar" MaxLength="5" />
+          <Property Name="totalFees" Type="int" />
+          <Property Name="feesOwed" Type="int" />
+          <Property Name="parent1Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="parent1Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="parent1City" Type="nvarchar" MaxLength="50" />
+          <Property Name="parent1Zip" Type="int" />
+          <Property Name="parent1HomePhone" Type="nvarchar" MaxLength="12" />
+          <Property Name="parent1WorkPhone" Type="nvarchar" MaxLength="12" />
+          <Property Name="parent1CellPhone" Type="nvarchar" MaxLength="12" />
+          <Property Name="parent1Employer" Type="nvarchar" MaxLength="50" />
+          <Property Name="parent1Email" Type="nvarchar" MaxLength="75" />
+          <Property Name="parent2Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="parent2Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="parent2City" Type="nvarchar" MaxLength="50" />
+          <Property Name="parent2Zip" Type="int" />
+          <Property Name="parent2HomePhone" Type="nvarchar" MaxLength="12" />
+          <Property Name="parent2WorkPhone" Type="nvarchar" MaxLength="12" />
+          <Property Name="parent2CellPhone" Type="nvarchar" MaxLength="12" />
+          <Property Name="parent2Employer" Type="nvarchar" MaxLength="50" />
+          <Property Name="parent2Email" Type="nvarchar" MaxLength="75" />
+          <Property Name="child1Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="child1Address" Type="nvarchar" MaxLength="75" />
+          <Property Name="child1City" Type="nvarchar" MaxLength="50" />
+          <Property Name="child1Zip" Type="int" />
+          <Property Name="child1Phone" Type="nvarchar" MaxLength="12" />
+          <Property Name="child1Sex" Type="char" MaxLength="1" />
+          <Property Name="child1Birthday" Type="datetime" />
+          <Property Name="child1Birthplace" Type="nvarchar" MaxLength="50" />
+          <Property Name="child1Volleyball" Type="bit" />
+          <Property Name="child1Basketball" Type="bit" />
+          <Property Name="child1Track" Type="bit" />
+          <Property Name="child1Grade" Type="int" />
+          <Property Name="child1Status" Type="nvarchar" MaxLength="3" />
+          <Property Name="child1Medical" Type="bit" />
+          <Property Name="child1Concussion" Type="bit" />
+          <Property Name="child1Risk" Type="bit" />
+          <Property Name="child1Physical" Type="bit" />
+          <Property Name="child1SportsmanPlayer" Type="bit" />
+          <Property Name="child1SportsmanParent" Type="bit" />
+          <Property Name="child2Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="child2Address" Type="nvarchar" MaxLength="75" />
+          <Property Name="child2City" Type="nvarchar" MaxLength="50" />
+          <Property Name="child2Zip" Type="int" />
+          <Property Name="child2Phone" Type="nvarchar" MaxLength="12" />
+          <Property Name="child2Sex" Type="char" MaxLength="1" />
+          <Property Name="child2Birthday" Type="datetime" />
+          <Property Name="child2Birthplace" Type="nvarchar" MaxLength="50" />
+          <Property Name="child2Volleyball" Type="bit" />
+          <Property Name="child2Basketball" Type="bit" />
+          <Property Name="child2Track" Type="bit" />
+          <Property Name="child2Grade" Type="int" />
+          <Property Name="child2Status" Type="nvarchar" MaxLength="3" />
+          <Property Name="child2Medical" Type="bit" />
+          <Property Name="child2Concussion" Type="bit" />
+          <Property Name="child2Risk" Type="bit" />
+          <Property Name="child2Physical" Type="bit" />
+          <Property Name="child2SportsmanPlayer" Type="bit" />
+          <Property Name="child2SportsmanParent" Type="bit" />
+          <Property Name="child3Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="child3Address" Type="nvarchar" MaxLength="75" />
+          <Property Name="child3City" Type="nvarchar" MaxLength="50" />
+          <Property Name="child3Zip" Type="int" />
+          <Property Name="child3Phone" Type="nvarchar" MaxLength="12" />
+          <Property Name="child3Sex" Type="char" MaxLength="1" />
+          <Property Name="child3Birthday" Type="datetime" />
+          <Property Name="child3Birthplace" Type="nvarchar" MaxLength="50" />
+          <Property Name="child3Volleyball" Type="bit" />
+          <Property Name="child3Basketball" Type="bit" />
+          <Property Name="child3Track" Type="bit" />
+          <Property Name="child3Grade" Type="int" />
+          <Property Name="child3Status" Type="nvarchar" MaxLength="3" />
+          <Property Name="child3Medical" Type="bit" />
+          <Property Name="child3Concussion" Type="bit" />
+          <Property Name="child3Risk" Type="bit" />
+          <Property Name="child3Physical" Type="bit" />
+          <Property Name="child3SportsmanPlayer" Type="bit" />
+          <Property Name="child3SportsmanParent" Type="bit" />
+          <Property Name="child4Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="child4Address" Type="nvarchar" MaxLength="75" />
+          <Property Name="child4City" Type="nvarchar" MaxLength="50" />
+          <Property Name="child4Zip" Type="int" />
+          <Property Name="child4Phone" Type="nvarchar" MaxLength="12" />
+          <Property Name="child4Sex" Type="char" MaxLength="1" />
+          <Property Name="child4Birthday" Type="datetime" />
+          <Property Name="child4Birthplace" Type="nvarchar" MaxLength="50" />
+          <Property Name="child4Volleyball" Type="bit" />
+          <Property Name="child4Basketball" Type="bit" />
+          <Property Name="child4Track" Type="bit" />
+          <Property Name="child4Grade" Type="int" />
+          <Property Name="child4Status" Type="nvarchar" MaxLength="3" />
+          <Property Name="child4Medical" Type="bit" />
+          <Property Name="child4Concussion" Type="bit" />
+          <Property Name="child4Risk" Type="bit" />
+          <Property Name="child4Physical" Type="bit" />
+          <Property Name="child4SportsmanPlayer" Type="bit" />
+          <Property Name="child4SportsmanParent" Type="bit" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="STMModelStoreContainer">
+          <EntitySet Name="STMRegistration" EntityType="Self.STMRegistration" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="STMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="STMRegistration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="concessionsForm" Type="Boolean" />
+          <Property Name="paidFees" Type="Boolean" />
+          <Property Name="howPaid" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="totalFees" Type="Int32" />
+          <Property Name="feesOwed" Type="Int32" />
+          <Property Name="parent1Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parent1Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parent1City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parent1Zip" Type="Int32" />
+          <Property Name="parent1HomePhone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="parent1WorkPhone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="parent1CellPhone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="parent1Employer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parent1Email" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="parent2Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parent2Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="parent2City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parent2Zip" Type="Int32" />
+          <Property Name="parent2HomePhone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="parent2WorkPhone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="parent2CellPhone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="parent2Employer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parent2Email" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="child1Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child1Address" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="child1City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child1Zip" Type="Int32" />
+          <Property Name="child1Phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="child1Sex" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="child1Birthday" Type="DateTime" Precision="3" />
+          <Property Name="child1Birthplace" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child1Volleyball" Type="Boolean" />
+          <Property Name="child1Basketball" Type="Boolean" />
+          <Property Name="child1Track" Type="Boolean" />
+          <Property Name="child1Grade" Type="Int32" />
+          <Property Name="child1Status" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="child1Medical" Type="Boolean" />
+          <Property Name="child1Concussion" Type="Boolean" />
+          <Property Name="child1Risk" Type="Boolean" />
+          <Property Name="child1Physical" Type="Boolean" />
+          <Property Name="child1SportsmanPlayer" Type="Boolean" />
+          <Property Name="child1SportsmanParent" Type="Boolean" />
+          <Property Name="child2Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child2Address" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="child2City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child2Zip" Type="Int32" />
+          <Property Name="child2Phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="child2Sex" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="child2Birthday" Type="DateTime" Precision="3" />
+          <Property Name="child2Birthplace" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child2Volleyball" Type="Boolean" />
+          <Property Name="child2Basketball" Type="Boolean" />
+          <Property Name="child2Track" Type="Boolean" />
+          <Property Name="child2Grade" Type="Int32" />
+          <Property Name="child2Status" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="child2Medical" Type="Boolean" />
+          <Property Name="child2Concussion" Type="Boolean" />
+          <Property Name="child2Risk" Type="Boolean" />
+          <Property Name="child2Physical" Type="Boolean" />
+          <Property Name="child2SportsmanPlayer" Type="Boolean" />
+          <Property Name="child2SportsmanParent" Type="Boolean" />
+          <Property Name="child3Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child3Address" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="child3City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child3Zip" Type="Int32" />
+          <Property Name="child3Phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="child3Sex" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="child3Birthday" Type="DateTime" Precision="3" />
+          <Property Name="child3Birthplace" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child3Volleyball" Type="Boolean" />
+          <Property Name="child3Basketball" Type="Boolean" />
+          <Property Name="child3Track" Type="Boolean" />
+          <Property Name="child3Grade" Type="Int32" />
+          <Property Name="child3Status" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="child3Medical" Type="Boolean" />
+          <Property Name="child3Concussion" Type="Boolean" />
+          <Property Name="child3Risk" Type="Boolean" />
+          <Property Name="child3Physical" Type="Boolean" />
+          <Property Name="child3SportsmanPlayer" Type="Boolean" />
+          <Property Name="child3SportsmanParent" Type="Boolean" />
+          <Property Name="child4Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child4Address" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="child4City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child4Zip" Type="Int32" />
+          <Property Name="child4Phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="child4Sex" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="child4Birthday" Type="DateTime" Precision="3" />
+          <Property Name="child4Birthplace" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="child4Volleyball" Type="Boolean" />
+          <Property Name="child4Basketball" Type="Boolean" />
+          <Property Name="child4Track" Type="Boolean" />
+          <Property Name="child4Grade" Type="Int32" />
+          <Property Name="child4Status" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="child4Medical" Type="Boolean" />
+          <Property Name="child4Concussion" Type="Boolean" />
+          <Property Name="child4Risk" Type="Boolean" />
+          <Property Name="child4Physical" Type="Boolean" />
+          <Property Name="child4SportsmanPlayer" Type="Boolean" />
+          <Property Name="child4SportsmanParent" Type="Boolean" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityContainer Name="STMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="STMRegistrations" EntityType="Self.STMRegistration" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="STMModelStoreContainer" CdmEntityContainer="STMEntities">
+          <EntitySetMapping Name="STMRegistrations">
+            <EntityTypeMapping TypeName="STMModel.STMRegistration">
+              <MappingFragment StoreEntitySet="STMRegistration">
+                <ScalarProperty Name="concessionsForm" ColumnName="concessionsForm" />
+                <ScalarProperty Name="paidFees" ColumnName="paidFees" />
+                <ScalarProperty Name="howPaid" ColumnName="howPaid" />
+                <ScalarProperty Name="totalFees" ColumnName="totalFees" />
+                <ScalarProperty Name="feesOwed" ColumnName="feesOwed" />
+                <ScalarProperty Name="parent1Name" ColumnName="parent1Name" />
+                <ScalarProperty Name="parent1Address" ColumnName="parent1Address" />
+                <ScalarProperty Name="parent1City" ColumnName="parent1City" />
+                <ScalarProperty Name="parent1Zip" ColumnName="parent1Zip" />
+                <ScalarProperty Name="parent1HomePhone" ColumnName="parent1HomePhone" />
+                <ScalarProperty Name="parent1WorkPhone" ColumnName="parent1WorkPhone" />
+                <ScalarProperty Name="parent1CellPhone" ColumnName="parent1CellPhone" />
+                <ScalarProperty Name="parent1Employer" ColumnName="parent1Employer" />
+                <ScalarProperty Name="parent1Email" ColumnName="parent1Email" />
+                <ScalarProperty Name="parent2Name" ColumnName="parent2Name" />
+                <ScalarProperty Name="parent2Address" ColumnName="parent2Address" />
+                <ScalarProperty Name="parent2City" ColumnName="parent2City" />
+                <ScalarProperty Name="parent2Zip" ColumnName="parent2Zip" />
+                <ScalarProperty Name="parent2HomePhone" ColumnName="parent2HomePhone" />
+                <ScalarProperty Name="parent2WorkPhone" ColumnName="parent2WorkPhone" />
+                <ScalarProperty Name="parent2CellPhone" ColumnName="parent2CellPhone" />
+                <ScalarProperty Name="parent2Employer" ColumnName="parent2Employer" />
+                <ScalarProperty Name="parent2Email" ColumnName="parent2Email" />
+                <ScalarProperty Name="child1Name" ColumnName="child1Name" />
+                <ScalarProperty Name="child1Address" ColumnName="child1Address" />
+                <ScalarProperty Name="child1City" ColumnName="child1City" />
+                <ScalarProperty Name="child1Zip" ColumnName="child1Zip" />
+                <ScalarProperty Name="child1Phone" ColumnName="child1Phone" />
+                <ScalarProperty Name="child1Sex" ColumnName="child1Sex" />
+                <ScalarProperty Name="child1Birthday" ColumnName="child1Birthday" />
+                <ScalarProperty Name="child1Birthplace" ColumnName="child1Birthplace" />
+                <ScalarProperty Name="child1Volleyball" ColumnName="child1Volleyball" />
+                <ScalarProperty Name="child1Basketball" ColumnName="child1Basketball" />
+                <ScalarProperty Name="child1Track" ColumnName="child1Track" />
+                <ScalarProperty Name="child1Grade" ColumnName="child1Grade" />
+                <ScalarProperty Name="child1Status" ColumnName="child1Status" />
+                <ScalarProperty Name="child1Medical" ColumnName="child1Medical" />
+                <ScalarProperty Name="child1Concussion" ColumnName="child1Concussion" />
+                <ScalarProperty Name="child1Risk" ColumnName="child1Risk" />
+                <ScalarProperty Name="child1Physical" ColumnName="child1Physical" />
+                <ScalarProperty Name="child1SportsmanPlayer" ColumnName="child1SportsmanPlayer" />
+                <ScalarProperty Name="child1SportsmanParent" ColumnName="child1SportsmanParent" />
+                <ScalarProperty Name="child2Name" ColumnName="child2Name" />
+                <ScalarProperty Name="child2Address" ColumnName="child2Address" />
+                <ScalarProperty Name="child2City" ColumnName="child2City" />
+                <ScalarProperty Name="child2Zip" ColumnName="child2Zip" />
+                <ScalarProperty Name="child2Phone" ColumnName="child2Phone" />
+                <ScalarProperty Name="child2Sex" ColumnName="child2Sex" />
+                <ScalarProperty Name="child2Birthday" ColumnName="child2Birthday" />
+                <ScalarProperty Name="child2Birthplace" ColumnName="child2Birthplace" />
+                <ScalarProperty Name="child2Volleyball" ColumnName="child2Volleyball" />
+                <ScalarProperty Name="child2Basketball" ColumnName="child2Basketball" />
+                <ScalarProperty Name="child2Track" ColumnName="child2Track" />
+                <ScalarProperty Name="child2Grade" ColumnName="child2Grade" />
+                <ScalarProperty Name="child2Status" ColumnName="child2Status" />
+                <ScalarProperty Name="child2Medical" ColumnName="child2Medical" />
+                <ScalarProperty Name="child2Concussion" ColumnName="child2Concussion" />
+                <ScalarProperty Name="child2Risk" ColumnName="child2Risk" />
+                <ScalarProperty Name="child2Physical" ColumnName="child2Physical" />
+                <ScalarProperty Name="child2SportsmanPlayer" ColumnName="child2SportsmanPlayer" />
+                <ScalarProperty Name="child2SportsmanParent" ColumnName="child2SportsmanParent" />
+                <ScalarProperty Name="child3Name" ColumnName="child3Name" />
+                <ScalarProperty Name="child3Address" ColumnName="child3Address" />
+                <ScalarProperty Name="child3City" ColumnName="child3City" />
+                <ScalarProperty Name="child3Zip" ColumnName="child3Zip" />
+                <ScalarProperty Name="child3Phone" ColumnName="child3Phone" />
+                <ScalarProperty Name="child3Sex" ColumnName="child3Sex" />
+                <ScalarProperty Name="child3Birthday" ColumnName="child3Birthday" />
+                <ScalarProperty Name="child3Birthplace" ColumnName="child3Birthplace" />
+                <ScalarProperty Name="child3Volleyball" ColumnName="child3Volleyball" />
+                <ScalarProperty Name="child3Basketball" ColumnName="child3Basketball" />
+                <ScalarProperty Name="child3Track" ColumnName="child3Track" />
+                <ScalarProperty Name="child3Grade" ColumnName="child3Grade" />
+                <ScalarProperty Name="child3Status" ColumnName="child3Status" />
+                <ScalarProperty Name="child3Medical" ColumnName="child3Medical" />
+                <ScalarProperty Name="child3Concussion" ColumnName="child3Concussion" />
+                <ScalarProperty Name="child3Risk" ColumnName="child3Risk" />
+                <ScalarProperty Name="child3Physical" ColumnName="child3Physical" />
+                <ScalarProperty Name="child3SportsmanPlayer" ColumnName="child3SportsmanPlayer" />
+                <ScalarProperty Name="child3SportsmanParent" ColumnName="child3SportsmanParent" />
+                <ScalarProperty Name="child4Name" ColumnName="child4Name" />
+                <ScalarProperty Name="child4Address" ColumnName="child4Address" />
+                <ScalarProperty Name="child4City" ColumnName="child4City" />
+                <ScalarProperty Name="child4Zip" ColumnName="child4Zip" />
+                <ScalarProperty Name="child4Phone" ColumnName="child4Phone" />
+                <ScalarProperty Name="child4Sex" ColumnName="child4Sex" />
+                <ScalarProperty Name="child4Birthday" ColumnName="child4Birthday" />
+                <ScalarProperty Name="child4Birthplace" ColumnName="child4Birthplace" />
+                <ScalarProperty Name="child4Volleyball" ColumnName="child4Volleyball" />
+                <ScalarProperty Name="child4Basketball" ColumnName="child4Basketball" />
+                <ScalarProperty Name="child4Track" ColumnName="child4Track" />
+                <ScalarProperty Name="child4Grade" ColumnName="child4Grade" />
+                <ScalarProperty Name="child4Status" ColumnName="child4Status" />
+                <ScalarProperty Name="child4Medical" ColumnName="child4Medical" />
+                <ScalarProperty Name="child4Concussion" ColumnName="child4Concussion" />
+                <ScalarProperty Name="child4Risk" ColumnName="child4Risk" />
+                <ScalarProperty Name="child4Physical" ColumnName="child4Physical" />
+                <ScalarProperty Name="child4SportsmanPlayer" ColumnName="child4SportsmanPlayer" />
+                <ScalarProperty Name="child4SportsmanParent" ColumnName="child4SportsmanParent" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

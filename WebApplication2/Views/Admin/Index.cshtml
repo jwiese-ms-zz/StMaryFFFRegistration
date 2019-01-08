@@ -1,0 +1,647 @@
+﻿@model IEnumerable<WebApplication2.STMRegistration>
+
+@{
+    ViewBag.Title = "All Registrations";
+}
+
+<h2>All Registrations</h2>
+@{
+    if (Session["IsAdmin"] == null)
+    {
+        Session["IsAdmin"] = "false";
+    }
+
+    if (IsPost || Session["IsAdmin"].ToString() == "true")
+    {
+        if (Session["IsAdmin"].ToString() == "false" && (string.IsNullOrEmpty(Request["passWord"]) || Request["passWord"] != "MonicaRocks1916"))
+        {
+            Response.Write("<div class='row'><font color='red'><strong>Incorrect Password, please try again</strong></font></div>");
+        }
+        else
+        {
+            Session["IsAdmin"] = "true";
+
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.concessionsForm)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.paidFees)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.howPaid)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.totalFees)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.feesOwed)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1Zip)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1HomePhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1WorkPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1CellPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1Employer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent1Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2Zip)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2HomePhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2WorkPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2CellPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2Employer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.parent2Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Zip)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Sex)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Birthday)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Birthplace)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Volleyball)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Basketball)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Track)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Grade)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Medical)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Concussion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Risk)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1Physical)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1SportsmanPlayer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child1SportsmanParent)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Zip)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Sex)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Birthday)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Birthplace)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Volleyball)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Basketball)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Track)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Grade)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Medical)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Concussion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Risk)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2Physical)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2SportsmanPlayer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child2SportsmanParent)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Zip)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Sex)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Birthday)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Birthplace)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Volleyball)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Basketball)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Track)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Grade)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Medical)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Concussion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Risk)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3Physical)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3SportsmanPlayer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child3SportsmanParent)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Zip)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Sex)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Birthday)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Birthplace)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Volleyball)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Basketball)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Track)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Grade)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Medical)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Concussion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Risk)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4Physical)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4SportsmanPlayer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.child4SportsmanParent)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.concessionsForm)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.paidFees)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.howPaid)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.totalFees)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.feesOwed)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1Zip)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1HomePhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1WorkPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1CellPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1Employer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent1Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2Zip)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2HomePhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2WorkPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2CellPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2Employer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.parent2Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Zip)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Sex)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Birthday)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Birthplace)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Volleyball)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Basketball)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Track)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Grade)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Medical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Concussion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Risk)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1Physical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1SportsmanPlayer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child1SportsmanParent)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Zip)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Sex)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Birthday)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Birthplace)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Volleyball)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Basketball)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Track)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Grade)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Medical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Concussion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Risk)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2Physical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2SportsmanPlayer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child2SportsmanParent)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Zip)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Sex)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Birthday)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Birthplace)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Volleyball)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Basketball)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Track)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Grade)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Medical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Concussion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Risk)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3Physical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3SportsmanPlayer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child3SportsmanParent)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Zip)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Sex)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Birthday)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Birthplace)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Volleyball)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Basketball)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Track)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Grade)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Medical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Concussion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Risk)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4Physical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4SportsmanPlayer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.child4SportsmanParent)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        }
+    }
+}
+
+<div class="row">
+    <form method="post">
+        <p>Please input your password  <input type="password" name="passWord" /></p>
+        <input type="submit" value="submit" />
+    </form>
+</div>
